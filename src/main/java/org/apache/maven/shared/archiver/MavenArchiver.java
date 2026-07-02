@@ -208,18 +208,13 @@ public class MavenArchiver {
 
     private void addManifestAttribute(Manifest manifest, String key, String value) throws ManifestException {
         String sanitized = sanitizeManifestValue(value);
-        if (!(sanitized == null || sanitized.isEmpty())) {
-            Manifest.Attribute attr = new Manifest.Attribute(key, sanitized);
-            manifest.addConfiguredAttribute(attr);
-        } else {
-            Manifest.Attribute attr = new Manifest.Attribute(key, "");
-            manifest.addConfiguredAttribute(attr);
-        }
+        Manifest.Attribute attr = new Manifest.Attribute(key, sanitized);
+        manifest.addConfiguredAttribute(attr);
     }
 
     private static String sanitizeManifestValue(String value) {
         if (value == null) {
-            return null;
+            return "";
         }
         return value.replace("\r\n", " ").replace('\r', ' ').replace('\n', ' ');
     }
