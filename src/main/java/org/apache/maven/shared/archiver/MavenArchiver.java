@@ -99,8 +99,7 @@ public class MavenArchiver {
 
     private static final List<String> ARTIFACT_EXPRESSION_PREFIXES;
 
-    private static final Pattern SPECIFICATION_VERSION_PATTERN =
-            Pattern.compile("([0-9]+\\.[0-9]+)(.*?)");
+    private static final Pattern SPECIFICATION_VERSION_PATTERN = Pattern.compile("([0-9]+\\.[0-9]+)(.*?)");
 
     static {
         List<String> artifactExpressionPrefixes = new ArrayList<>();
