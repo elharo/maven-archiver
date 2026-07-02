@@ -164,7 +164,7 @@ public class MavenArchiver {
 
                         for (Map.Entry<String, String> entry : sectionEntries.entrySet()) {
                             String key = entry.getKey();
-                            String value = entry.getValue();
+                            String value = sanitizeManifestValue(entry.getValue());
                             Manifest.Attribute attr = new Manifest.Attribute(key, value);
                             theSection.addConfiguredAttribute(attr);
                         }
@@ -207,15 +207,21 @@ public class MavenArchiver {
     }
 
     private void addManifestAttribute(Manifest manifest, String key, String value) throws ManifestException {
-        if (!(value == null || value.isEmpty())) {
-            Manifest.Attribute attr = new Manifest.Attribute(key, value);
+        String sanitized = sanitizeManifestValue(value);
+        if (!(sanitized == null || sanitized.isEmpty())) {
+            Manifest.Attribute attr = new Manifest.Attribute(key, sanitized);
             manifest.addConfiguredAttribute(attr);
         } else {
-            // if the value is empty, create an entry with an empty string
-            // to prevent null print in the manifest file
             Manifest.Attribute attr = new Manifest.Attribute(key, "");
             manifest.addConfiguredAttribute(attr);
         }
+    }
+
+    private static String sanitizeManifestValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return value.replace("\r\n", " ").replace('\r', ' ').replace('\n', ' ');
     }
 
     /**
